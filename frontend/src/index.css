@@ -1,0 +1,624 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap');
+
+/* ─── VEED Design Tokens ─────────────────────────────────────────── */
+:root {
+  /* Brand greens */
+  --color-lime-spark:   #96ff1a;
+  --color-spring-wash:  #d6ffa6;
+  --color-forest-ink:   #083300;
+  --color-mint-mist:    #e6ffc8;
+
+  /* Neutrals — warm near-black, not dead black */
+  --color-carbon:    #0c0a09;
+  --color-charcoal:  #323232;
+  --color-graphite:  #292a2e;
+  --color-onyx:      #121212;
+  --color-slate:     #4d4d51;
+  --color-smoke:     #71737a;
+  --color-ash:       #444446;
+  --color-mist:      #f2f1f0;
+  --color-fog:       #e6e6e7;
+  --color-paper:     #ffffff;
+
+  /* Semantic shortcuts */
+  --color-text-primary:    var(--color-carbon);
+  --color-text-muted:      var(--color-smoke);
+  --color-bg:              var(--color-paper);
+  --color-border:          var(--color-fog);
+  --color-accent:          var(--color-lime-spark);
+  --color-accent-text:     var(--color-forest-ink);
+  --color-surface:         var(--color-mist);
+  --color-dark-section:    var(--color-onyx);
+
+  /* Typography */
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-ui:      'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* Type scale */
+  --text-caption:    11px;
+  --text-body:       16px;
+  --text-subheading: 40px;
+  --text-heading:    44px;
+  --text-display:    54px;
+
+  /* Leading */
+  --leading-caption:    1.5;
+  --leading-body:       1.5;
+  --leading-subheading: 1;
+  --leading-heading:    0.9;
+  --leading-display:    0.88;
+
+  /* Tracking */
+  --tracking-caption:    0.01em;
+  --tracking-body:       -0.016px;
+  --tracking-subheading: -0.025em;
+  --tracking-heading:    -0.04em;
+  --tracking-display:    -0.05em;
+
+  /* Border radius */
+  --radius-card:   16px;
+  --radius-btn:    10px;
+  --radius-input:  10px;
+  --radius-pill:   9999px;
+  --radius-chip:   4px;
+
+  /* Spacing — 4px base unit */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-7:  28px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-30: 120px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap:    80px;
+  --card-padding:   16px;
+
+  /* Shadows — borders only, no elevation (VEED rule) */
+  --shadow-card: 0 0 0 1px var(--color-fog);
+}
+
+/* ─── Reset & Base ───────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg);
+  letter-spacing: var(--tracking-body);
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* ─── Typography Utilities ───────────────────────────────────────── */
+
+/* Display headline — Playfair, 54px, editorial tight */
+.text-display {
+  font-family: var(--font-display);
+  font-size: var(--text-display);
+  font-weight: 400;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  color: var(--color-carbon);
+}
+
+/* Section heading — Playfair, 44px */
+.text-heading {
+  font-family: var(--font-display);
+  font-size: var(--text-heading);
+  font-weight: 400;
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading);
+  color: var(--color-carbon);
+}
+
+/* Sub-heading — Inter, 40px */
+.text-subheading {
+  font-family: var(--font-ui);
+  font-size: var(--text-subheading);
+  font-weight: 500;
+  line-height: var(--leading-subheading);
+  letter-spacing: var(--tracking-subheading);
+  color: var(--color-carbon);
+}
+
+/* Body */
+.text-body {
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  font-weight: 400;
+  line-height: var(--leading-body);
+  color: var(--color-carbon);
+}
+
+.text-muted {
+  color: var(--color-smoke);
+}
+
+.text-caption {
+  font-family: var(--font-ui);
+  font-size: var(--text-caption);
+  font-weight: 500;
+  line-height: var(--leading-caption);
+  letter-spacing: var(--tracking-caption);
+  color: var(--color-smoke);
+}
+
+/* White variant — for dark sections */
+.text-display-white,
+.text-heading-white {
+  color: var(--color-paper);
+}
+
+/* ─── Layout Utilities ───────────────────────────────────────────── */
+.page-container {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+}
+
+.section {
+  padding: var(--space-20) 0;
+}
+
+/* Full-bleed dark band — the VEED rhythm break */
+.dark-band {
+  background-color: var(--color-dark-section);
+  padding: var(--space-20) 0;
+  width: 100%;
+}
+
+/* Spring wash band — soft green tinted section */
+.green-band {
+  background-color: var(--color-spring-wash);
+  padding: var(--space-20) 0;
+}
+
+/* ─── Buttons ────────────────────────────────────────────────────── */
+
+/* Primary — lime spark, the ignition button */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background-color: var(--color-lime-spark);
+  color: var(--color-forest-ink);
+  border: 1px solid var(--color-forest-ink);
+  border-radius: var(--radius-btn);
+  padding: 14px 24px;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  opacity: 0.88;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* Ghost — secondary action */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background-color: transparent;
+  color: var(--color-charcoal);
+  border: 1px solid var(--color-fog);
+  border-radius: var(--radius-btn);
+  padding: 14px 24px;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-ghost:hover {
+  background-color: var(--color-mist);
+  border-color: var(--color-charcoal);
+}
+
+/* Pill — dark conversion button (nav Sign Up) */
+.btn-pill-dark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background-color: var(--color-carbon);
+  color: var(--color-paper);
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 8px 20px;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+  text-decoration: none;
+}
+
+.btn-pill-dark:hover {
+  opacity: 0.82;
+}
+
+/* ─── Cards ──────────────────────────────────────────────────────── */
+.card {
+  background-color: var(--color-paper);
+  border: 1px solid var(--color-fog);
+  border-radius: var(--radius-card);
+  padding: var(--card-padding);
+}
+
+.card-hover {
+  transition: border-color 0.2s ease;
+}
+
+.card-hover:hover {
+  border-color: var(--color-charcoal);
+}
+
+/* Metric / stat card */
+.metric-card {
+  background-color: var(--color-paper);
+  border: 1px solid var(--color-fog);
+  border-radius: var(--radius-card);
+  padding: var(--space-6);
+}
+
+.metric-card .metric-label {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-smoke);
+  margin-bottom: var(--space-2);
+}
+
+.metric-card .metric-value {
+  font-family: var(--font-ui);
+  font-size: 40px;
+  font-weight: 600;
+  letter-spacing: var(--tracking-subheading);
+  color: var(--color-carbon);
+  line-height: 1;
+}
+
+/* ─── Badges & Chips ─────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-chip);
+  font-size: var(--text-caption);
+  font-weight: 500;
+}
+
+.badge-green {
+  background-color: var(--color-spring-wash);
+  color: var(--color-forest-ink);
+}
+
+.badge-red {
+  background-color: #ffe5e5;
+  color: #8b0000;
+}
+
+.badge-amber {
+  background-color: #fff3cd;
+  color: #7d5a00;
+}
+
+.badge-gray {
+  background-color: var(--color-mist);
+  color: var(--color-charcoal);
+}
+
+/* ─── AI Prompt Input ────────────────────────────────────────────── */
+.ai-input-wrap {
+  background-color: var(--color-paper);
+  border: 1px solid var(--color-fog);
+  border-radius: 16px;
+  padding: var(--space-6);
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  transition: border-color 0.2s ease;
+}
+
+.ai-input-wrap:focus-within {
+  border-color: var(--color-charcoal);
+}
+
+.ai-input-wrap textarea {
+  flex: 1;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  font-weight: 400;
+  color: var(--color-carbon);
+  background: transparent;
+  line-height: var(--leading-body);
+  min-height: 60px;
+}
+
+.ai-input-wrap textarea::placeholder {
+  color: var(--color-smoke);
+}
+
+/* Circular lime submit arrow */
+.ai-submit-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--color-lime-spark);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+  color: var(--color-forest-ink);
+}
+
+.ai-submit-btn:hover { opacity: 0.85; }
+.ai-submit-btn:active { transform: scale(0.94); }
+
+/* ─── Navigation ─────────────────────────────────────────────────── */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background-color: var(--color-paper);
+  border-bottom: 1px solid var(--color-fog);
+  height: 60px;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-inner {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar-logo {
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-carbon);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.navbar-logo .logo-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-lime-spark);
+  border: 1px solid var(--color-forest-ink);
+  display: inline-block;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  list-style: none;
+}
+
+.navbar-links a {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-charcoal);
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.navbar-links a:hover {
+  color: var(--color-carbon);
+}
+
+.navbar-links a.active {
+  color: var(--color-carbon);
+  border-bottom-color: var(--color-lime-spark);
+}
+
+/* ─── Deal Pipeline (Kanban) ─────────────────────────────────────── */
+.kanban-board {
+  display: flex;
+  gap: var(--space-4);
+  overflow-x: auto;
+  padding-bottom: var(--space-4);
+}
+
+.kanban-column {
+  min-width: 240px;
+  flex: 1;
+  background-color: var(--color-mist);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+}
+
+.kanban-column-header {
+  font-family: var(--font-ui);
+  font-size: var(--text-caption);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-smoke);
+  margin-bottom: var(--space-3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.kanban-card {
+  background-color: var(--color-paper);
+  border: 1px solid var(--color-fog);
+  border-radius: 10px;
+  padding: var(--space-4);
+  margin-bottom: var(--space-3);
+  cursor: grab;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.kanban-card:hover {
+  border-color: var(--color-charcoal);
+}
+
+.kanban-card:active {
+  cursor: grabbing;
+}
+
+.kanban-card .deal-brand {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-carbon);
+  margin-bottom: var(--space-1);
+}
+
+.kanban-card .deal-amount {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-forest-ink);
+  background-color: var(--color-spring-wash);
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: var(--radius-chip);
+  margin-bottom: var(--space-2);
+}
+
+/* ─── Risk Flags (Contract Lab) ─────────────────────────────────── */
+.risk-flag {
+  border-left: 4px solid;
+  border-radius: 0 var(--radius-btn) var(--radius-btn) 0;
+  padding: var(--space-4);
+  margin-bottom: var(--space-3);
+  background-color: var(--color-mist);
+}
+
+.risk-flag.risk-high   { border-left-color: #dc3545; }
+.risk-flag.risk-medium { border-left-color: #fd7e14; }
+.risk-flag.risk-low    { border-left-color: #ffc107; }
+
+.risk-flag .risk-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-1);
+}
+
+.risk-flag.risk-high   .risk-label { color: #dc3545; }
+.risk-flag.risk-medium .risk-label { color: #fd7e14; }
+.risk-flag.risk-low    .risk-label { color: #c89a00; }
+
+/* ─── Loading Animation ──────────────────────────────────────────── */
+@keyframes lime-pulse {
+  0%, 80%, 100% { transform: scale(0); opacity: 0; }
+  40%            { transform: scale(1); opacity: 1; }
+}
+
+.loading-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.loading-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-lime-spark);
+  border: 1px solid var(--color-forest-ink);
+  animation: lime-pulse 1.4s ease-in-out infinite both;
+}
+
+.loading-dots span:nth-child(1) { animation-delay: 0s; }
+.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+/* ─── Main content offset for fixed navbar ───────────────────────── */
+.main-content {
+  padding-top: 60px;
+}
+
+/* ─── Dividers ───────────────────────────────────────────────────── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--color-fog);
+  margin: var(--space-8) 0;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .text-display { font-size: 36px; }
+  .text-heading  { font-size: 30px; }
+  .text-subheading { font-size: 28px; }
+
+  .navbar-links { display: none; }
+  .kanban-board { flex-direction: column; }
+  .kanban-column { min-width: 100%; }
+
+  .page-container { padding: 0 var(--space-4); }
+  .section { padding: var(--space-12) 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
