@@ -129,28 +129,27 @@ export default function Dashboard() {
 
   }, [])
 
-  const totalEarned =
-    deals
-      .filter(d => d.status === 'paid')
-      .reduce(
-        (sum, d) => sum + Number(d.deal_amount),
-        0
-      )
-
+ const totalEarned =
+  deals
+    .filter(d => d.stage === 'paid')
+    .reduce(
+      (sum, d) => sum + Number(d.deal_amount || 0),
+      0
+    )
   const activeDeals =
-    deals.filter(
-      d => d.status !== 'paid'
-    ).length
+  deals.filter(
+    d => d.stage !== 'paid'
+  ).length
 
-  const pendingInvoice =
-    deals
-      .filter(
-        d => d.status === 'invoiced'
-      )
+ const pendingInvoice =
+  deals
+    .filter(
+      d => d.stage === 'invoiced'
+    )
       .reduce(
-        (sum, d) => sum + Number(d.deal_amount),
-        0
-      )
+  (sum, d) => sum + Number(d.deal_amount || 0),
+  0
+)
 
   const tdsReceivable =
     Math.round(

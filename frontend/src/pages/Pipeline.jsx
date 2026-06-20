@@ -24,11 +24,16 @@ function AddDealModal({ column, onAdd, onClose }) {
   const [form, setForm] = useState({ brand_name: '', campaign_name: '', deal_amount: '' })
 
   const submit = () => {
-    if (!form.brand_name || !form.deal_amount) return
-    onAdd({ ...form, deal_amount: Number(form.deal_amount), status: column.id, id: Date.now().toString() })
-    onClose()
-  }
-
+  if (!form.brand_name || !form.deal_amount) return
+  // Don't generate ID here; the backend does it.
+  onAdd({ 
+    brand_name: form.brand_name, 
+    campaign_name: form.campaign_name, 
+    deal_amount: Number(form.deal_amount), 
+    status: column.id 
+  })
+  onClose()
+}
   return (
     <div style={{ position: 'fixed', inset: 0, background: 'rgba(12,10,9,0.5)', zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div className="card" style={{ width: '100%', maxWidth: '440px', padding: '28px', margin: '16px' }}>
@@ -80,23 +85,60 @@ export default function Pipeline() {
   useEffect(() => {
     fetch(`${API}/api/deals`)
       .then(r => r.json())
-      .then(data => { if (Array.isArray(data)) setDeals(data) })
-      .catch(() => {})
-  }, [])
+      .then(data => { 
+        if (Array.isArray(data)) {
+          // MAP the database 'stage' to the UI's 'status'
+          const formattedDeals = data.map(d => ({
+            ...d,
+            status: d.stage // This ensures the UI columns find the deals
+          }));
+          setDeals(formattedDeals);
+        }
+      })
+      .catch(err => console.error("Error fetching deals:", err));
+  }, []);
 
   const moveDeal = async (dealId, newStatus) => {
-    setDeals(ds => ds.map(d => d.id === dealId ? { ...d, status: newStatus } : d))
-    try {
-      await fetch(`${API}/api/deals/${dealId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus }),
-      })
-    } catch {}
+  // Optimistic update
+  const previousDeals = [...deals];
+  setDeals(ds => ds.map(d => d.id === dealId ? { ...d, status: newStatus } : d));
+
+  try {
+    const response = await fetch(`${API}/api/deals/${dealId}/stage`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ stage: newStatus }), // Change 'status' to 'stage'
+    });
+    if (!response.ok) throw new Error("Update failed");
+  } catch (err) {
+    setDeals(previousDeals); // Rollback if the database update fails
+    alert("Could not update deal status in database.");
   }
+}
 
-  const addDeal = (deal) => setDeals(ds => [...ds, deal])
-
+  const addDeal = async (deal) => {
+    try {
+      const response = await fetch(`${API}/api/deals`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          brand_name: deal.brand_name,
+          deal_amount: deal.deal_amount,
+          // CRITICAL: Rename 'status' to 'stage' to match your Python Pydantic model
+          stage: deal.status 
+        }),
+      });
+      
+      if (response.ok) {
+        // Fetch the fresh list from the database to ensure ID is included
+        const updatedDeals = await fetch(`${API}/api/deals`).then(r => r.json());
+        setDeals(updatedDeals);
+        setModal(null);
+      }
+    } catch (err) {
+      console.error("Failed to add deal:", err);
+    }
+  }
   // Drag-and-drop (native HTML5 — no extra deps needed)
   const onDragStart = (e, dealId) => { setDragging(dealId); e.dataTransfer.effectAllowed = 'move' }
   const onDragEnd   = ()           => { setDragging(null); setDragOver(null) }

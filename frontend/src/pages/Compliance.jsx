@@ -71,19 +71,27 @@ export default function Compliance() {
   const hasInputs   = feesNum > 0 || giftsNum > 0
 
   useEffect(() => {
-    fetch(`${API}/api/compliance/${CURRENT_FY}`)
-      .then(r => r.json())
-      .then(data => { if (Array.isArray(data)) setLedger(data) })
-      .catch(() => {
-        setLedger([
-          { month: 'April 2024',    income: 45000, tds: 4500,  gifts: 0 },
-          { month: 'May 2024',      income: 28000, tds: 2800,  gifts: 5000 },
-          { month: 'June 2024',     income: 75000, tds: 7500,  gifts: 22000 },
-          { month: 'July 2024',     income: 35000, tds: 3500,  gifts: 0 },
-        ])
-      })
-  }, [])
+    // Only fetch if we have data to calculate
+    if (feesNum === 0 && giftsNum === 0) return;
 
+    fetch(`${API}/api/compliance/calculate-tax`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        gross_amount: feesNum, 
+        include_gst: true, 
+        tds_rate_percentage: 10.0 
+      })
+    })
+      .then(r => r.json())
+      .then(data => {
+        // You'll need to decide how to map this response to your 'ledger' state
+        console.log("Calculated Tax Data:", data);
+        // If your ledger needs this specific format, map it here:
+        // setLedger(...) 
+      })
+      .catch(err => console.error("Tax calc failed:", err));
+  }, [feesNum, giftsNum]); // This will re-run whenever the user types a new amount
   const downloadLedger = async () => {
     try {
       const res = await fetch(`${API}/api/compliance/pdf`)

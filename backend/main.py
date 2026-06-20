@@ -85,6 +85,28 @@ def get_deals(db: Session = Depends(get_db)):
         for d in deals
     ]
 # --- ADD THIS AT THE VERY BOTTOM OF YOUR main.py FILE ---
+class CreateDealRequest(BaseModel):
+    brand_name: str
+    deliverable: str | None = None
+    deal_amount: float | None = None
+    stage: str = "negotiating"
+@app.post("/api/deals")
+def create_deal(req: CreateDealRequest, db: Session = Depends(get_db)):
+    new_deal = Deal(
+        brand_name=req.brand_name,
+        deliverable=req.deliverable,
+        deal_amount=req.deal_amount,
+        stage=req.stage
+    )
+
+    db.add(new_deal)
+    db.commit()
+    db.refresh(new_deal)
+
+    return {
+        "message": "Deal created successfully",
+        "deal_id": new_deal.id
+    }
 
 @app.get("/api/dashboard/stats")
 def get_dashboard_stats(db: Session = Depends(get_db)):
@@ -127,7 +149,18 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
         "totalPipelineValue": sum(d.deal_amount or d.suggested_counter or 0.0 for d in deals)
     }
 
+class CreateDealRequest(BaseModel):
+    brand_name: str
+    deliverable: str | None = None
+    deal_amount: float | None = None
+    stage: str = "negotiating"
 
+
+class CreateDealRequest(BaseModel):
+    brand_name: str
+    deliverable: str | None = None
+    deal_amount: float | None = None
+    stage: str = "negotiating"
 class StageUpdateRequest(BaseModel):
     stage: str
     deal_amount: float | None = None
